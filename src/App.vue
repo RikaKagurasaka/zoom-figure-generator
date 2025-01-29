@@ -4,7 +4,6 @@
       <svg
         :viewBox="`0 0 ${imgProps.width || 100} ${imgProps.height || 100}`"
         ref="svgRef"
-        
         class="w-full h-full"
       >
         <image :href="imgData" v-if="imgData" />
@@ -59,6 +58,10 @@
     <div class="w-64 flex-grow-1 panel h-full overflow-y-auto pb-16">
       <h1 class="text-2xl font-bold mb-4 block">Zoomed View Generator</h1>
       <button class="btn" @click="uploadImg">上传图片</button>
+      <button class="btn" @click="helpShow = true">
+        帮助
+        <HelpView v-model:show="helpShow" />
+      </button>
       <div class="form-control">
         <label class="label">画布大小</label>
         <input
@@ -365,6 +368,7 @@ import {
 import { default as LegendConfigView } from "./LegendConfig.vue";
 import ScaleView from "./ScaleView.vue";
 import AdvancedStyling from "./assets/AdvancedStyling.vue";
+import HelpView from "./HelpView.vue";
 
 function blobToBase64(blob: Blob) {
   return new Promise<string>((resolve, reject) => {
@@ -384,7 +388,7 @@ const imgProps = useLocalStorage("imgProps", {
 const advancedStylingShowSRect = ref(false);
 const advancedStylingShowLRect = ref(false);
 const advancedStylingShowConnectLines = ref(false);
-
+const helpShow = ref(false);
 const conf = useLocalStorage("conf", {
   sRect: {
     enable: true,
@@ -493,7 +497,6 @@ const { segments } = useConnectLines(conf);
 
 async function loadImg(blob: Blob) {
   const b64 = await blobToBase64(blob);
-  console.log(b64);
 
   const img = new Image();
   img.onload = () => {
@@ -521,15 +524,17 @@ function uploadImg() {
 }
 
 function save() {
-  htmlToImage.toPng(svgRef.value! as unknown as HTMLElement,{
-    width:imgProps.value.width!,
-    height:imgProps.value.height!
-  }).then((dataUrl) => {
-    const a = document.createElement("a");
-    a.href = dataUrl;
-    a.download = "image.png";
-    a.click();
-  });
+  htmlToImage
+    .toPng(svgRef.value! as unknown as HTMLElement, {
+      width: imgProps.value.width!,
+      height: imgProps.value.height!,
+    })
+    .then((dataUrl) => {
+      const a = document.createElement("a");
+      a.href = dataUrl;
+      a.download = "image.png";
+      a.click();
+    });
 }
 
 onMounted(async () => {

@@ -10,7 +10,9 @@
   },
   "dependencies": {
     "@vueuse/core": "^12.5.0",
+    "@vueuse/integrations": "^12.5.0",
     "html-to-image": "^1.11.11",
+    "idb-keyval": "^6.2.1",
     "vue": "^3.5.13"
   },
   "devDependencies": {

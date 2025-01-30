@@ -2,11 +2,47 @@
   <Teleport to="body" v-if="show">
     <div class="mask" @click.self="close">
       <div class="content flex flex-col gap-4">
-        <textarea
-          v-model="jsonContent"
-          class="w-full h-full font-mono"
-          spellcheck="false"
-        ></textarea>
+        <div class="flex flex-1 gap-4">
+          <div class="flex-1 flex flex-col gap-4">
+            <div class="form-control">
+              <label for="">填充颜色</label>
+              <input readonly :disabled="true" v-model="conf.fill" />
+            </div>
+            <div class="form-control">
+              <label for="">描边颜色</label>
+              <input type="color" v-model="conf.stroke" />
+            </div>
+            <div class="form-control">
+              <label for="">描边宽度</label>
+              <input type="number" v-model.number="conf.strokeWidth" />
+            </div>
+            <div class="form-control">
+              <label for="">虚线样式</label>
+              <input type="text" v-model="conf.strokeDasharray" />
+            </div>
+            <div class="form-control">
+              <label for="">边缘样式</label>
+              <select v-model="conf.strokeLinecap">
+                <option value="round">圆角</option>
+                <option value="square">方形</option>
+                <option value="butt">直线</option>
+              </select>
+            </div>
+            <div class="form-control">
+              <label for="">连接样式</label>
+              <select v-model="conf.strokeLinejoin">
+                <option value="round">圆角</option>
+                <option value="square">方形</option>
+                <option value="miter">尖角</option>
+              </select>
+            </div>
+          </div>
+          <textarea
+            v-model="jsonContent"
+            class="h-full font-mono flex-1 border border-gray-300 rounded-md p-2"
+            spellcheck="false"
+          ></textarea>
+        </div>
         <button class="btn-apply" :disabled="!jsonValid" @click="apply">
           应用
         </button>
@@ -28,7 +64,7 @@ const emit = defineEmits<{
   (e: "update:show", value: boolean): void;
   (e: "update:conf", value: Record<string, any>): void;
 }>();
-const { show } = useVModels(props, emit);
+const { show, conf } = useVModels(props, emit);
 
 function close() {
   show.value = false;
@@ -36,9 +72,9 @@ function close() {
 
 const jsonContent = ref("");
 watch(
-  props.conf,
-  (newVal) => {
-    jsonContent.value = JSON.stringify(newVal, null, 2);
+  [conf, show],
+  () => {
+    jsonContent.value = JSON.stringify(conf.value, null, 2);
   },
   { immediate: true, deep: true }
 );

@@ -347,6 +347,10 @@
         />
       </div>
       <button class="btn-primary" @click="save">保存图片</button>
+      <p class="text-sm text-gray-500">
+        保存图片功能可能故障，若点击无反应请使用截图工具。
+      </p>
+      <!-- <button class="btn-primary" @click="saveSvg">保存SVG</button> -->
     </div>
   </div>
 </template>
@@ -354,8 +358,8 @@
 <script setup lang="ts">
 import * as htmlToImage from "html-to-image";
 
-import { useLocalStorage } from "@vueuse/core";
-import { computed, onMounted, ref, type CSSProperties } from "vue";
+import { until, useLocalStorage } from "@vueuse/core";
+import { computed, onMounted, ref, watch, type CSSProperties } from "vue";
 import exampleImg from "@/assets/example.jpg";
 import {
   useDraggableSvg,
@@ -369,6 +373,7 @@ import { default as LegendConfigView } from "./LegendConfig.vue";
 import ScaleView from "./ScaleView.vue";
 import AdvancedStyling from "./assets/AdvancedStyling.vue";
 import HelpView from "./HelpView.vue";
+import { useIDBKeyval } from "@vueuse/integrations/useIDBKeyval";
 
 function blobToBase64(blob: Blob) {
   return new Promise<string>((resolve, reject) => {
@@ -379,7 +384,12 @@ function blobToBase64(blob: Blob) {
   });
 }
 
-const imgData = useLocalStorage("imgData", "");
+// const imgData = useLocalStorage("imgData", "");
+const { data: imgData, isFinished: isImgDataLoaded } = useIDBKeyval(
+  "imgData",
+  ""
+);
+
 const imgProps = useLocalStorage("imgProps", {
   width: null as number | null,
   height: null as number | null,
@@ -398,7 +408,7 @@ const conf = useLocalStorage("conf", {
     height: 634,
     style: {
       fill: "#01010101",
-      stroke: "red",
+      stroke: "#ff0000",
       strokeWidth: 15,
       strokeDasharray: "40,40",
       strokeLinecap: "round",
@@ -413,7 +423,7 @@ const conf = useLocalStorage("conf", {
     height: 1700,
     style: {
       fill: "#01010101",
-      stroke: "red",
+      stroke: "#ff0000",
       strokeWidth: 10,
       strokeDasharray: "0",
       strokeLinecap: "round",
@@ -423,7 +433,7 @@ const conf = useLocalStorage("conf", {
   connectLines: {
     enable: true,
     style: {
-      stroke: "red",
+      stroke: "#ff0000",
       strokeWidth: 15,
       strokeDasharray: "40,40",
       strokeLinecap: "round",
@@ -528,6 +538,7 @@ function save() {
     .toPng(svgRef.value! as unknown as HTMLElement, {
       width: imgProps.value.width!,
       height: imgProps.value.height!,
+      includeQueryParams: true,
     })
     .then((dataUrl) => {
       const a = document.createElement("a");
@@ -537,10 +548,15 @@ function save() {
     });
 }
 
+
 onMounted(async () => {
   // localStorage.clear();
-  const blob = await fetch(exampleImg).then((res) => res.blob());
-  loadImg(blob);
+  await until(isImgDataLoaded).toBeTruthy();
+  if (!imgData.value) {
+    console.log("load example img");
+    const blob = await fetch(exampleImg).then((res) => res.blob());
+    loadImg(blob);
+  }
 });
 </script>
 

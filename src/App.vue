@@ -1,12 +1,12 @@
 <template>
   <div class="flex w-full flex-1 h-[calc(100vh-1rem)]">
     <div class="flex-grow-5">
-      <svg
+      <svg v-if="imgData"
         :viewBox="`0 0 ${imgProps.width || 100} ${imgProps.height || 100}`"
         ref="svgRef"
         class="w-full h-full"
       >
-        <image :href="imgData" v-if="imgData" />
+        <image :href="imgData" />
         <rect
           v-show="conf.sRect.enable"
           :x="conf.sRect.x"
@@ -56,7 +56,14 @@
       </svg>
     </div>
     <div class="w-64 flex-grow-1 panel h-full overflow-y-auto pb-16">
-      <h1 class="text-2xl font-bold mb-4 block">Zoomed View Generator</h1>
+      <h1 class="text-2xl font-bold mb-4 block">
+        Zoomed View Generator
+        <a
+          class="text-sm text-gray-500"
+          href="https://github.com/RikaKagurasaka/zoom-figure-generator"
+          >Repo</a
+        >
+      </h1>
       <button class="btn" @click="uploadImg">上传图片</button>
       <button class="btn" @click="helpShow = true">
         帮助

@@ -1,5 +1,21 @@
-# Vue 3 + TypeScript + Vite
+# 局部放大图生成器
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+受小红书用户 lulululu 帖文启发，制作此工具。
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+## 在线使用
+
+[https://zoomedview.vercel.app/](https://zoomedview.vercel.app/)
+## 界面
+
+![界面](./images/web.png)
+## 示例
+
+![示例](./images/image2.png)
+![示例](./images/image3.png)
+
+## 使用
+
+```bash
+npm install
+npm run dev
+```

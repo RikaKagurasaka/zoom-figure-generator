@@ -359,7 +359,7 @@
 import * as htmlToImage from "html-to-image";
 
 import { until, useLocalStorage } from "@vueuse/core";
-import { computed, onMounted, ref, watch, type CSSProperties } from "vue";
+import { computed, onMounted, ref, type CSSProperties } from "vue";
 import exampleImg from "@/assets/example.jpg";
 import {
   useDraggableSvg,

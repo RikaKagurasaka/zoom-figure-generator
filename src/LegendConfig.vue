@@ -10,7 +10,7 @@
                 <label class="label">颜色</label>
                 <div class="flex items-center gap-1">
                   <span
-                    v-for="(color, iindex) in item"
+                    v-for="(_, iindex) in item"
                     :key="iindex"
                     class="w-6 h-6"
                   >
@@ -107,7 +107,6 @@
 import { useVModels } from "@vueuse/core";
 import type { LegendConfig } from "./lib.tsx";
 import LegendRenderer from "./LegendRenderer.vue";
-import { ref } from "vue";
 import * as htmlToImage from "html-to-image";
 
 const familyOptions = ["font-sans", "font-serif", "font-mono"];

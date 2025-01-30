@@ -1,6 +1,5 @@
 import {
   useDraggable,
-  useElementBounding,
   useElementByPoint,
   useEventListener,
   useMouse,
@@ -8,11 +7,8 @@ import {
 } from "@vueuse/core";
 import {
   computed,
-  defineComponent,
   ref,
   toValue,
-  watch,
-  type CSSProperties,
   type MaybeRefOrGetter,
   type Ref,
 } from "vue";
